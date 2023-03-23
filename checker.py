@@ -100,6 +100,9 @@ if __name__ == "__main__":
     print(len(checker.urlsAmazon))
     print(total)
     print('\n')
-    
-    print(*checker.titlesAmazon,"-- Amazon Price: ", *checker.pricesAmazon,"-- Walmart Price: ",*checker.pricesWalmart, sep = "\n")
 
+    data = list(zip(checker.titlesAmazon,checker.pricesAmazon,checker.pricesWalmart))
+    print("(Item, Amazon Price, Walmart Price")
+    print(*data,sep ="\n")
+
+    # print(*checker.titlesAmazon,"-- Amazon Price: ", *checker.pricesAmazon,"-- Walmart Price: ",*checker.pricesWalmart, sep = "\n")
