@@ -14,7 +14,7 @@ from selenium.webdriver.firefox.service import Service
 
 class PriceChecker:
     def __init__(self):
-        #self.Amazon = [[]*3]
+        # self.Amazon = [[]*3]
         self.urlsAmazon = []
         self.titlesAmazon = []
         self.pricesAmazon = []
@@ -45,7 +45,7 @@ class PriceChecker:
             self.titlesAmazon.append(soup.find(id='productTitle').get_text().strip())
 
             try:
-                #print(soup.find(id='sns-base-price').get_text().strip())
+                # print(soup.find(id='sns-base-price').get_text().strip())
                 self.pricesAmazon.append(soup.find('span', class_='a-offscreen').get_text())
                 current = current + 1
             except:
@@ -59,7 +59,7 @@ class PriceChecker:
             profile_path = r'/Users/fdonoso/Library/Application Support/Firefox/Profiles/yjau3k6a.FrankieD'
             service = Service(r'/Users/fdonoso/Downloads/geckodriver')
             options = Options()
-            options.headless = True
+            options.add_argument("--headless")
             options.set_preference('profile', profile_path)
 
             driver = Firefox(service=service, options=options)
@@ -67,16 +67,15 @@ class PriceChecker:
             driver.get(url)
 
             try:
-                #print(soup.find(id='sns-base-emprop="price"))
-                #print(page.headers)
+                # print(soup.find(id='sns-base-emprop="price"))
+                # print(page.headers)
                 self.pricesWalmart.append(driver.find_element(By.XPATH, '/html/body/div[1]/div[1]/div/div/div[2]/div/section/main/div[2]/div[2]/div/div[1]/div/div/div[2]/div/div/div[2]/div/div/div[1]/span[1]/span[2]/span').text)
                 driver.quit()
                 current = current + 1
                 continue
             except:
                 print("Trying alternative XPATH")
-                #driver.quit()
-                
+                # driver.quit()
 
             try:
                 self.pricesWalmart.append(driver.find_element(By.XPATH, '/html/body/div[1]/div[1]/div/div/div[2]/div/section/main/div[2]/div[2]/div/div[1]/div/div/div[1]/div/div/div[2]/div/div/div[1]/span/span[2]/span').text)
@@ -87,8 +86,8 @@ class PriceChecker:
                 current = current + 1
                 driver.quit()
         
-    def export(self, strMethod):
-        strMethod = 'Placeholder'
+    def export(self, strmethod):
+        strmethod = 'Placeholder'
 
 
 if __name__ == "__main__":
