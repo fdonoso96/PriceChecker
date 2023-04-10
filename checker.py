@@ -80,8 +80,8 @@ class PriceChecker:
 
                 self.pricesWalmart.append(driver.find_element(By.XPATH,
                                                               '/html/body/div[1]/div[1]/div/div/div[2]/div/section/main/div[2]/div[2]/div/div[1]/div/div/div[2]/div/div/div[2]/div/div/div[1]/span[1]/span[2]/span').text)
-                # driver.quit()
                 current = current + 1
+                driver.quit()
                 continue
             except NoSuchElementException:
                 print("Trying alternative XPATH")
@@ -91,12 +91,12 @@ class PriceChecker:
                 self.pricesWalmart.append(driver.find_element(By.XPATH,
                                                               '/html/body/div[1]/div[1]/div/div/div[2]/div/section/main/div[2]/div[2]/div/div[1]/div/div/div[1]/div/div/div[2]/div/div/div[1]/span/span[2]/span').text)
                 current = current + 1
-                # driver.quit()
+                driver.quit()
             except NoSuchElementException:
                 self.pricesWalmart.append("None")
                 current = current + 1
-                # driver.quit()
-            driver.quit()
+                driver.quit()
+            # driver.quit()
 
     def export(self, strmethod):
         pass
