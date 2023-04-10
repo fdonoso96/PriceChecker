@@ -33,48 +33,37 @@ class PriceChecker:
 
     def checkPricesAmazon(self):
         current = 1
+        profile_path = r'/Users/fdonoso/Library/Application Support/Firefox/Profiles/yjau3k6a.FrankieD'
+        service = Service(r'/Users/fdonoso/Downloads/geckodriver')
+        options = Options()
+        options.add_argument("--headless")
+        options.set_preference('profile', profile_path)
+        driver = Firefox(service=service, options=options)
+
         for url in self.urlsAmazon:
             print(f"Currently checking product {current} on Amazon.")
-            profile_path = r'/Users/fdonoso/Library/Application Support/Firefox/Profiles/yjau3k6a.FrankieD'
-            service = Service(r'/Users/fdonoso/Downloads/geckodriver')
-            options = Options()
-            options.add_argument("--headless")
-            options.set_preference('profile', profile_path)
-
-            driver = Firefox(service=service, options=options)
-            time.sleep(3)
             driver.get(url)
+            time.sleep(3)
             self.titlesAmazon.append(
                 driver.find_element(By.ID, 'productTitle').text)
 
             try:
                 # print(soup.find(id='sns-base-price').get_text().strip())
-                self.pricesAmazon.append(
-                    driver.find_element(By.ID, 'sns-base-price').text)
+                price_string = driver.find_element(By.ID, 'sns-base-price').text
+                price_string = price_string.split(" ",1)[0]
+                self.pricesAmazon.append(price_string)
                 current = current + 1
-
+                # driver.quit()
             except NoSuchElementException:
                 self.pricesAmazon.append(" ")
                 current = current + 1
+                # driver.quit()
 
-        # current = 1
-        # for url in self.urlsAmazon:
-        #     print(f"Currently checking product {current} on Amazon.")
-        #     page = requests.get(url, headers=self.HEADERS)
-        #     soup = bs4.BeautifulSoup(page.content, features='lxml')
-        #     self.titlesAmazon.append(soup.find(id='productTitle').get_text().strip())
-        #
-        #     try:
-        #         # print(soup.find(id='sns-base-price').get_text().strip())
-        #         self.pricesAmazon.append(
-        #             soup.find('span', class_='a-offscreen').get_text())
-        #         current = current + 1
-        #     except:
-        #         self.pricesAmazon.append(" ")
-        #         current = current + 1
+        driver.quit()
 
     def checkPricesWalmart(self):
         current = 1
+
         for url in self.urlsWalmart:
             print(f"Currently checking product {current} on Walmart.")
             profile_path = r'/Users/fdonoso/Library/Application Support/Firefox/Profiles/yjau3k6a.FrankieD'
@@ -82,17 +71,16 @@ class PriceChecker:
             options = Options()
             options.add_argument("--headless")
             options.set_preference('profile', profile_path)
-
             driver = Firefox(service=service, options=options)
-            time.sleep(3)
+
             driver.get(url)
+            # time.sleep(3)
 
             try:
-                # print(soup.find(id='sns-base-emprop="price"))
-                # print(page.headers)
+
                 self.pricesWalmart.append(driver.find_element(By.XPATH,
                                                               '/html/body/div[1]/div[1]/div/div/div[2]/div/section/main/div[2]/div[2]/div/div[1]/div/div/div[2]/div/div/div[2]/div/div/div[1]/span[1]/span[2]/span').text)
-                driver.quit()
+                # driver.quit()
                 current = current + 1
                 continue
             except NoSuchElementException:
@@ -103,14 +91,15 @@ class PriceChecker:
                 self.pricesWalmart.append(driver.find_element(By.XPATH,
                                                               '/html/body/div[1]/div[1]/div/div/div[2]/div/section/main/div[2]/div[2]/div/div[1]/div/div/div[1]/div/div/div[2]/div/div/div[1]/span/span[2]/span').text)
                 current = current + 1
-                driver.quit()
+                # driver.quit()
             except NoSuchElementException:
                 self.pricesWalmart.append("None")
                 current = current + 1
-                driver.quit()
+                # driver.quit()
+            driver.quit()
 
     def export(self, strmethod):
-        strmethod = 'Placeholder'
+        pass
 
 
 if __name__ == "__main__":
@@ -134,4 +123,6 @@ if __name__ == "__main__":
     data = list(zip(checker.titlesAmazon, checker.pricesAmazon, checker.pricesWalmart))
     print("(Item, Amazon Price, Walmart Price)")
     print(*data, sep="\n")
+    # print(checker.titlesAmazon)
+    # print(checker.pricesWalmart)
     # print(*checker.titlesAmazon,"-- Amazon Price: ", *checker.pricesAmazon,"-- Walmart Price: ",*checker.pricesWalmart, sep = "\n")
